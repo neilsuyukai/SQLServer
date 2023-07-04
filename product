@@ -1,0 +1,95 @@
+-- 建立資料庫
+CREATE DATABASE ECommerce;
+
+-- 使用資料庫
+USE ECommerce;
+
+-- 建立商品類別表格
+CREATE TABLE Categories (
+  CategoryID INT PRIMARY KEY,
+  CategoryName VARCHAR(50)
+);
+
+-- 建立商品表格
+CREATE TABLE Products (
+  ProductID INT PRIMARY KEY,
+  ProductName VARCHAR(100),
+  CategoryID INT,
+  Price DECIMAL(10,2),
+  FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+
+-- 建立訂單表格
+CREATE TABLE Orders (
+  OrderID INT PRIMARY KEY,
+  CustomerID INT,
+  OrderDate DATE,
+  FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+-- 建立訂單明細表格
+CREATE TABLE OrderDetails (
+  OrderDetailID INT PRIMARY KEY,
+  OrderID INT,
+  ProductID INT,
+  Quantity INT,
+  FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+-- 建立客戶表格
+CREATE TABLE Customers (
+  CustomerID INT PRIMARY KEY,
+  CustomerName VARCHAR(50),
+  City VARCHAR(50),
+  Country VARCHAR(50)
+);
+
+-- 插入商品類別資料
+INSERT INTO Categories (CategoryID, CategoryName)
+VALUES (1, 'Electronics');
+
+INSERT INTO Categories (CategoryID, CategoryName)
+VALUES (2, 'Clothing');
+
+-- 插入商品資料
+INSERT INTO Products (ProductID, ProductName, CategoryID, Price)
+VALUES (1, 'iPhone 12', 1, 999.99);
+
+INSERT INTO Products (ProductID, ProductName, CategoryID, Price)
+VALUES (2, 'Samsung Galaxy S21', 1, 899.99);
+
+-- 插入客戶資料
+INSERT INTO Customers (CustomerID, CustomerName, City, Country)
+VALUES (1, 'John Smith', 'New York', 'USA');
+
+INSERT INTO Customers (CustomerID, CustomerName, City, Country)
+VALUES (2, 'Jane Doe', 'London', 'UK');
+
+-- 插入訂單資料
+INSERT INTO Orders (OrderID, CustomerID, OrderDate)
+VALUES (1, 1, '2023-01-15');
+
+INSERT INTO Orders (OrderID, CustomerID, OrderDate)
+VALUES (2, 2, '2023-02-20');
+
+-- 插入訂單明細資料
+INSERT INTO OrderDetails (OrderDetailID, OrderID, ProductID, Quantity)
+VALUES (1, 1, 1, 2);
+
+INSERT INTO OrderDetails (OrderDetailID, OrderID, ProductID, Quantity)
+VALUES (2, 2, 2, 1);
+
+-- 複雜查詢：查詢訂單明細與相關產品和客戶的資訊
+SELECT
+  Orders.OrderID,
+  Customers.CustomerName,
+  Customers.City,
+  Products.ProductName,
+  Products.Price,
+  OrderDetails.Quantity
+FROM
+  Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;

@@ -1,0 +1,2 @@
+-- 查詢所有的顧客記錄
+SELECT * FROM Customers;

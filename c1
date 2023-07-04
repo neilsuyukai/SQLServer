@@ -1,0 +1,3 @@
+-- 新增一筆記錄到 Customers 表格
+INSERT INTO Customers (CustomerName, City, Country)
+VALUES ('John Doe', 'New York', 'USA');
